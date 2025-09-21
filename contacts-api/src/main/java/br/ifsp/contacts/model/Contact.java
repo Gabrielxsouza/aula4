@@ -4,6 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 /**
  * Classe que representa o modelo de dados para um Contato.
@@ -22,19 +28,41 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "O nome deve ser preenchido")
     private String nome;
+
+    @Size(min = 8, max = 15, message = "O telefone deve ter entre 8 e 15 caracteres")
     private String telefone;
+
+    @Email(message = "O email deve ser valido")
     private String email;
 
-    // Construtor vazio exigido pelo JPA
+    @OneToMany(mappedBy = "contact")
+    private List<Address> addresses;
+
+    
     public Contact() {}
 
-    // Construtor para facilitar a criação de objetos
-    public Contact(String nome, String telefone, String email) {
+   
+
+    public Contact(Long id, String nome, String telefone, String email, List<Address> addresses) {
+        this.id = id;
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
+        this.addresses = addresses;
     }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+
 
     // Getters e Setters
     public Long getId() {
