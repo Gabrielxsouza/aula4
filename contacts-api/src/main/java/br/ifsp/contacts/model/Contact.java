@@ -8,8 +8,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.CascadeType;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Classe que representa o modelo de dados para um Contato.
@@ -38,7 +41,8 @@ public class Contact {
     @Email(message = "O email deve ser valido")
     private String email;
 
-    @OneToMany(mappedBy = "contact")
+    @OneToMany(mappedBy = "contact", orphanRemoval = true, cascade = CascadeType.ALL)   
+    @JsonManagedReference
     private List<Address> addresses;
 
     

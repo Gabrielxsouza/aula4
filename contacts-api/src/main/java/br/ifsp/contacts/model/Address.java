@@ -1,13 +1,17 @@
 package br.ifsp.contacts.model;
 
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
+import jakarta.persistence.*;
+
+
 
 
 
@@ -21,6 +25,18 @@ public class Address {
     private String estado;
     private String cep;
     
+    @ManyToOne
+    @JoinColumn(name = "contact_id", nullable = false)
+    @JsonBackReference
+    private Contact contact;
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
     
 
     public Address() {}
@@ -71,6 +87,10 @@ public class Address {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    
+
+
 
 
 }

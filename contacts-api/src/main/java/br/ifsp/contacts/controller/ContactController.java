@@ -3,15 +3,14 @@ package br.ifsp.contacts.controller;
 import br.ifsp.contacts.model.Address;
 import br.ifsp.contacts.model.Contact;
 import br.ifsp.contacts.repository.ContactRepository;
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import br.ifsp.contacts.repository.AddressRepository;
+
 
 
 
@@ -35,6 +34,10 @@ public class ContactController {
      */
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
 
     /**
      * Método para obter todos os contatos.
@@ -134,10 +137,24 @@ public class ContactController {
         return contactRepository.save(existingContact);
     }
 
-    @GetMapping("/{id}/addresses")
-    public List<Address> getAddresses(@RequestParam String id) {
-        return contactRepository.findById(Long.parseLong(id)).get().getAddresses();
+    
+
+    @PostMapping("/{id}/addresses")
+    public Address addAddressToContact(@PathVariable Long id, @RequestBody Address address) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contato não encontrado: " + id));
+        address.setContact(contact);
+        return addressRepository.save(address);
     }
+
+    @GetMapping("/{id}/addresses")
+    public List<Address> getContactAddresses(@PathVariable Long id) {
+    Contact contact = contactRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Contato nao encontrado: " + id));
+    
+    return contact.getAddresses();
+    }
+    
     
 
 }
