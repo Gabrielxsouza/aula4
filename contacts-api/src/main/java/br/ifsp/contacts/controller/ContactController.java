@@ -2,6 +2,8 @@ package br.ifsp.contacts.controller;
 
 import br.ifsp.contacts.model.Contact;
 import br.ifsp.contacts.repository.ContactRepository;
+import jakarta.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,10 +55,11 @@ public class ContactController {
                 .orElseThrow(() -> new RuntimeException("Contato não encontrado: " + id));
     }
 
-    @GetMapping("/nome/{nome}")
-    public List<Contact> getContactByName(@PathVariable String nome) {
-        
-        return contactRepository.findByNome(nome);
+    @GetMapping("/search")
+    public List<Contact> getContactByName(@RequestParam String name) {
+
+        String nome = name;
+        return contactRepository.findByNomeContainingIgnoreCase(nome);
                 
     }
 

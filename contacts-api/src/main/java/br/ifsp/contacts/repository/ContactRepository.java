@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     // Podemos adicionar métodos personalizados se necessário.
-    List<Contact> findByNome(String nome);
+    List<Contact> findByNomeContainingIgnoreCase(String nome);
 }
